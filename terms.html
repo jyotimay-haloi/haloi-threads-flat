@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Terms of Service | Haloi Threads</title><link rel="stylesheet" href="design-system.css"><style>.policy-page{max-width:760px;margin:0 auto;padding:140px var(--gutter) 100px}.policy-title{font-size:clamp(2rem,5vw,4rem);text-transform:uppercase;font-weight:700;margin-bottom:60px;border-bottom:1px solid var(--border-dim);padding-bottom:30px}.policy-section{margin-bottom:50px}.policy-h2{font-size:.75rem;text-transform:uppercase;letter-spacing:.25em;color:var(--accent-muga);margin-bottom:16px}.policy-text{font-size:.85rem;line-height:1.9;color:var(--text-secondary);letter-spacing:.04em}</style></head><body>
+<div class="central-thread"><div class="thread-pulse"></div></div>
+<nav id="main-nav"><a href="index.html" class="nav-logo">Haloi Threads</a><div class="nav-links"><a href="collection.html" class="nav-item">Collection</a><a href="shop.html" class="nav-item">Shop</a></div><div class="nav-right">
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">Cart <span id="nav-cart-count">(0)</span></button>
+            <div class="nav-hamburger" onclick="document.getElementById('main-nav').classList.toggle('nav-mobile-open')">
+                <span></span><span></span><span></span>
+            </div>
+        </div></nav>
+<div id="cart-overlay" onclick="HaloiCart.close()"></div><div id="cart-drawer"><div class="cart-header"><span class="cart-title">Your Selection</span><div class="close-cart" onclick="HaloiCart.close()">✕</div></div><div id="cart-items-wrapper" class="cart-items-container"></div><div class="cart-footer"><div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">&#8377;0</span></div><div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div><div class="cart-row total"><span>Total</span><span id="cart-total">&#8377;0</span></div><button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button></div></div>
+<div id="checkout-modal"><div class="checkout-box" id="checkout-box"></div></div>
+<main class="policy-page">
+<h1 class="policy-title">Terms of Service</h1>
+<p class="policy-text" style="margin-bottom:40px">Last updated: April 2026</p>
+<div class="policy-section"><div class="policy-h2">Acceptance</div><p class="policy-text">By using haloithreads.com and placing an order, you agree to these terms. Please read them carefully.</p></div>
+<div class="policy-section"><div class="policy-h2">Products</div><p class="policy-text">All products are subject to availability. We reserve the right to discontinue any product at any time. Product images are representative — actual colors may vary slightly due to screen settings and fabric dye lots.</p></div>
+<div class="policy-section"><div class="policy-h2">Orders & Pricing</div><p class="policy-text">Prices are in Indian Rupees (INR) inclusive of GST. We reserve the right to refuse or cancel orders at our discretion. In cases of pricing errors, we will contact you before processing.</p></div>
+<div class="policy-section"><div class="policy-h2">Intellectual Property</div><p class="policy-text">All content on this site — designs, text, images, and branding — is the property of Haloi Threads. Reproduction without written permission is prohibited.</p></div>
+<div class="policy-section"><div class="policy-h2">Governing Law</div><p class="policy-text">These terms are governed by the laws of India. Any disputes shall be subject to the jurisdiction of courts in Assam, India.</p></div>
+</main>
+<footer>                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div><p class="copyright">&copy; 2026 Haloi Threads.</p></footer>
+<script src="cart.js"></script></body></html>

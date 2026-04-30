@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Create Account | Haloi Threads</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .auth-page { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:120px var(--gutter) 80px; position:relative; }
+        .auth-box { width:100%; max-width:460px; position:relative; z-index:2; }
+        .auth-eyebrow { font-size:.65rem; text-transform:uppercase; letter-spacing:.28em; color:var(--accent-muga); display:block; margin-bottom:18px; text-align:center; }
+        .auth-title { font-size:clamp(2rem,6vw,3.5rem); text-transform:uppercase; font-weight:700; letter-spacing:-.02em; text-align:center; margin-bottom:50px; color:#fff; }
+        .auth-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .auth-field { margin-bottom:22px; }
+        .auth-field label { display:block; font-size:.62rem; text-transform:uppercase; letter-spacing:.22em; color:var(--text-secondary); margin-bottom:9px; }
+        .auth-field input { width:100%; padding:15px 18px; background:#0c0c0c; border:1px solid var(--border-dim); color:var(--text-primary); font-family:var(--font); font-size:.88rem; outline:none; transition:border-color .35s ease; -webkit-appearance:none; }
+        .auth-field input:focus { border-color:var(--accent-muga); }
+        .auth-field input::placeholder { color:#333; }
+        .auth-error { display:none; font-size:.6rem; text-transform:uppercase; letter-spacing:.12em; color:#c0392b; margin-top:7px; }
+        .auth-error.show { display:block; }
+        .btn-auth { width:100%; padding:17px; background:var(--accent-muga); color:#000; font-weight:700; text-transform:uppercase; letter-spacing:.22em; font-size:.72rem; border:none; cursor:pointer; font-family:var(--font); margin-top:10px; transition:opacity .3s, transform .3s; }
+        .btn-auth:hover { opacity:.85; transform:translateY(-1px); }
+        .auth-switch { text-align:center; margin-top:28px; font-size:.68rem; text-transform:uppercase; letter-spacing:.12em; color:var(--text-secondary); }
+        .auth-switch a { color:var(--accent-muga); border-bottom:1px solid transparent; transition:border-color .3s; }
+        .auth-switch a:hover { border-color:var(--accent-muga); }
+        .auth-success { display:none; text-align:center; padding:30px 0; }
+        .auth-success.show { display:block; }
+        .auth-success-icon { font-size:2rem; color:var(--accent-muga); margin-bottom:16px; }
+        .auth-success p { font-size:.75rem; text-transform:uppercase; letter-spacing:.15em; color:var(--text-secondary); line-height:1.8; }
+        .auth-terms { font-size:.6rem; text-transform:uppercase; letter-spacing:.1em; color:#333; text-align:center; margin-top:16px; line-height:1.6; }
+        .auth-terms a { color:#555; border-bottom:1px solid #333; }
+        .auth-bg-grid { position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px); background-size:80px 80px; pointer-events:none; z-index:0; }
+        @media (max-width:480px) { .auth-row { grid-template-columns:1fr; } }
+    </style>
+</head>
+<body>
+    <div class="central-thread"><div class="thread-pulse"></div></div>
+    <div class="auth-bg-grid"></div>
+
+    <div id="cart-overlay" onclick="HaloiCart.close()"></div>
+    <div id="cart-drawer">
+        <div class="cart-header"><span class="cart-title">Your Selection</span><div class="close-cart" onclick="HaloiCart.close()">✕</div></div>
+        <div id="cart-items-wrapper" class="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+            <div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="cart-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+            <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div id="checkout-modal"><div class="checkout-box" id="checkout-box"></div></div>
+
+    <nav id="main-nav">
+        <a href="index.html" class="nav-logo">Haloi Threads</a>
+        <div class="nav-links">
+            <a href="collection.html" class="nav-item">Collection</a>
+            <a href="shop.html" class="nav-item">Shop</a>
+            <a href="about.html" class="nav-item">About</a>
+        </div>
+        <div class="nav-right">
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">Cart <span id="nav-cart-count">(0)</span></button>
+            <div class="nav-hamburger" onclick="document.getElementById('main-nav').classList.toggle('nav-mobile-open')"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <main class="auth-page">
+        <div class="auth-box fade-up">
+            <span class="auth-eyebrow">Create Account</span>
+            <h1 class="auth-title">Join Us</h1>
+
+            <div id="signup-form">
+                <div class="auth-row">
+                    <div class="auth-field">
+                        <label for="su-fname">First Name</label>
+                        <input type="text" id="su-fname" placeholder="First" autocomplete="given-name">
+                        <span class="auth-error" id="err-fname">Required.</span>
+                    </div>
+                    <div class="auth-field">
+                        <label for="su-lname">Last Name</label>
+                        <input type="text" id="su-lname" placeholder="Last" autocomplete="family-name">
+                        <span class="auth-error" id="err-lname">Required.</span>
+                    </div>
+                </div>
+                <div class="auth-field">
+                    <label for="su-email">Email Address</label>
+                    <input type="email" id="su-email" placeholder="your@email.com" autocomplete="email">
+                    <span class="auth-error" id="err-su-email">Please enter a valid email.</span>
+                </div>
+                <div class="auth-field">
+                    <label for="su-phone">Phone (Optional)</label>
+                    <input type="tel" id="su-phone" placeholder="+91 98765 43210" autocomplete="tel">
+                </div>
+                <div class="auth-field">
+                    <label for="su-password">Password</label>
+                    <input type="password" id="su-password" placeholder="Min. 8 characters" autocomplete="new-password">
+                    <span class="auth-error" id="err-su-pass">Password must be at least 8 characters.</span>
+                </div>
+                <div class="auth-field">
+                    <label for="su-confirm">Confirm Password</label>
+                    <input type="password" id="su-confirm" placeholder="Repeat password" autocomplete="new-password">
+                    <span class="auth-error" id="err-su-confirm">Passwords do not match.</span>
+                </div>
+
+                <button class="btn-auth" onclick="handleSignup()">Create Account</button>
+
+                <p class="auth-terms">
+                    By creating an account, you agree to our
+                    <a href="terms.html">Terms of Service</a> and
+                    <a href="privacy.html">Privacy Policy</a>.
+                </p>
+
+                <div class="auth-switch" style="margin-top:24px;">
+                    Already have an account?&nbsp;&nbsp;<a href="login.html">Sign In</a>
+                </div>
+            </div>
+
+            <div class="auth-success" id="signup-success">
+                <div class="auth-success-icon">✓</div>
+                <p>Account created.<br>Welcome to Haloi Threads.<br><br>Redirecting to your profile...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div>
+        <p class="copyright">&copy; 2026 Haloi Threads. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script>
+    new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: .1 }).observe(document.querySelector('.fade-up'));
+
+    function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function showErr(id, show, msg) {
+        const el = document.getElementById(id);
+        el.classList.toggle('show', show);
+        if (msg) el.innerText = msg;
+    }
+    function setBorder(input, valid) {
+        input.style.borderColor = valid ? 'var(--border-dim)' : '#c0392b';
+    }
+
+    function handleSignup() {
+        const fname   = document.getElementById('su-fname');
+        const lname   = document.getElementById('su-lname');
+        const email   = document.getElementById('su-email');
+        const pass    = document.getElementById('su-password');
+        const confirm = document.getElementById('su-confirm');
+        let ok = true;
+
+        if (!fname.value.trim())             { showErr('err-fname', true); setBorder(fname, false); ok=false; } else { showErr('err-fname', false); setBorder(fname, true); }
+        if (!lname.value.trim())             { showErr('err-lname', true); setBorder(lname, false); ok=false; } else { showErr('err-lname', false); setBorder(lname, true); }
+        if (!validateEmail(email.value))     { showErr('err-su-email', true); setBorder(email, false); ok=false; } else { showErr('err-su-email', false); setBorder(email, true); }
+        if (pass.value.length < 8)           { showErr('err-su-pass', true); setBorder(pass, false); ok=false; } else { showErr('err-su-pass', false); setBorder(pass, true); }
+        if (pass.value !== confirm.value)    { showErr('err-su-confirm', true); setBorder(confirm, false); ok=false; } else { showErr('err-su-confirm', false); setBorder(confirm, true); }
+
+        if (!ok) return;
+
+        /* Save to localStorage */
+        const profile = {
+            firstName: fname.value.trim(),
+            lastName:  lname.value.trim(),
+            email:     email.value.trim(),
+            phone:     document.getElementById('su-phone').value.trim(),
+            joined:    new Date().toLocaleDateString('en-IN', { month:'long', year:'numeric' })
+        };
+        localStorage.setItem('ht_profile', JSON.stringify(profile));
+        localStorage.setItem('ht_email', email.value.trim());
+        localStorage.setItem('ht_password', pass.value);
+        localStorage.setItem('ht_logged_in', 'true');
+
+        document.getElementById('signup-form').style.display = 'none';
+        document.getElementById('signup-success').classList.add('show');
+        setTimeout(() => { window.location.href = 'profile.html'; }, 1600);
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') handleSignup(); });
+    </script>
+</body>
+</html>

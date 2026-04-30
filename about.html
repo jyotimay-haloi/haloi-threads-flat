@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About | Haloi Threads</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .about-wrapper { max-width: var(--max-w); margin: 0 auto; padding: 140px var(--gutter) 100px; }
+        .about-hero { margin-bottom: 120px; border-bottom: 1px solid var(--border-dim); padding-bottom: 80px; }
+        .about-eyebrow { font-size: .68rem; text-transform: uppercase; letter-spacing: .3em; color: var(--accent-muga); margin-bottom: 24px; display: block; }
+        .about-headline { font-size: clamp(2.5rem, 7vw, 6rem); text-transform: uppercase; font-weight: 700; letter-spacing: -.03em; line-height: .92; color: #fff; margin-bottom: 40px; }
+        .about-lead { font-size: clamp(1rem, 1.8vw, 1.2rem); line-height: 1.9; color: var(--text-secondary); max-width: 680px; letter-spacing: .04em; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; margin-bottom: 120px; }
+        .about-block {}
+        .about-block-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .3em; color: var(--accent-muga); margin-bottom: 20px; display: block; }
+        .about-block-title { font-size: clamp(1.2rem, 2.5vw, 1.8rem); text-transform: uppercase; color: #fff; font-weight: 700; margin-bottom: 20px; line-height: 1.2; }
+        .about-block-text { font-size: .85rem; line-height: 1.9; color: var(--text-secondary); letter-spacing: .04em; }
+        .about-manifesto { max-width: 800px; margin: 0 auto 120px; text-align: center; }
+        .manifesto-quote { font-size: clamp(1.4rem, 3vw, 2.2rem); color: #fff; font-weight: 300; line-height: 1.5; letter-spacing: .03em; margin-bottom: 20px; }
+        .manifesto-attr { font-size: .65rem; text-transform: uppercase; letter-spacing: .3em; color: var(--text-secondary); }
+        .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.03); }
+        .value-card { padding: 50px 36px; background: #060606; border-right: 1px solid rgba(255,255,255,.03); }
+        .value-card:last-child { border-right: none; }
+        .value-num { font-size: 2.5rem; font-weight: 700; color: rgba(255,255,255,.04); margin-bottom: 20px; letter-spacing: -.03em; }
+        .value-title { font-size: .82rem; text-transform: uppercase; letter-spacing: .15em; color: #fff; margin-bottom: 12px; font-weight: 600; }
+        .value-text { font-size: .78rem; line-height: 1.8; color: var(--text-secondary); letter-spacing: .04em; }
+        @media (max-width: 900px) {
+            .about-grid { grid-template-columns: 1fr; gap: 60px; }
+            .values-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="central-thread"><div class="thread-pulse"></div></div>
+    <div id="cart-overlay" onclick="HaloiCart.close()"></div>
+    <div id="cart-drawer">
+        <div class="cart-header">
+            <span class="cart-title">Your Selection</span>
+            <div class="close-cart" onclick="HaloiCart.close()">&#x2715;</div>
+        </div>
+        <div id="cart-items-wrapper" class="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">&#8377;0</span></div>
+            <div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="cart-row total"><span>Total</span><span id="cart-total">&#8377;0</span></div>
+            <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div id="checkout-modal"><div class="checkout-box" id="checkout-box"></div></div>
+    <nav id="main-nav">
+        <a href="index.html" class="nav-logo">Haloi Threads</a>
+        <div class="nav-links">
+            <a href="collection.html" class="nav-item">Collection</a>
+            <a href="shop.html" class="nav-item">Shop</a>
+            <a href="about.html" class="nav-item" style="color:#fff;">About</a>
+        </div>
+        <div class="nav-right">
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">Cart <span id="nav-cart-count">(0)</span></button>
+            <div class="nav-hamburger" onclick="document.getElementById('main-nav').classList.toggle('nav-mobile-open')"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <main class="about-wrapper">
+        <div class="about-hero fade-up">
+            <span class="about-eyebrow">Est. 2026 · Assam, India</span>
+            <h1 class="about-headline">We Build<br>Legacy.</h1>
+            <p class="about-lead">
+                Haloi Threads is a premium minimalist streetwear label born in Assam, India. 
+                We exist at the intersection of heritage craftsmanship and contemporary silence — 
+                garments designed not to shout, but to endure.
+            </p>
+        </div>
+
+        <div class="about-grid">
+            <div class="about-block fade-up">
+                <span class="about-block-label">The Origin</span>
+                <h2 class="about-block-title">Rooted in<br>Assam's Soil</h2>
+                <p class="about-block-text">
+                    Our story begins with the Muga silk of the Brahmaputra valley — the world's only 
+                    naturally golden silk, woven by hand for centuries. We take this heritage not as nostalgia, 
+                    but as a design principle: patience, intention, and quiet confidence in the work.
+                </p>
+            </div>
+            <div class="about-block fade-up" style="transition-delay:.15s;">
+                <span class="about-block-label">The Philosophy</span>
+                <h2 class="about-block-title">Silence As<br>Language</h2>
+                <p class="about-block-text">
+                    In a world of noise, we choose restraint. Every Haloi Threads piece is designed 
+                    to communicate through form, weight, and texture rather than logos or graphics. 
+                    We design for those who understand that less is not emptiness — it is precision.
+                </p>
+            </div>
+        </div>
+
+        <div class="about-manifesto fade-up">
+            <p class="manifesto-quote">"The most powerful statement a garment can make is the decision to say nothing at all."</p>
+            <span class="manifesto-attr">— Haloi Threads, Season 01</span>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-card fade-up">
+                <div class="value-num">01</div>
+                <h3 class="value-title">Material Integrity</h3>
+                <p class="value-text">We source only premium fabrics — heavyweight cotton, technical twill, Muga silk blends. Every textile is chosen for its hand-feel, durability, and visual silence.</p>
+            </div>
+            <div class="value-card fade-up" style="transition-delay:.1s;">
+                <div class="value-num">02</div>
+                <h3 class="value-title">Purposeful Design</h3>
+                <p class="value-text">Nothing is added without reason. Every seam, every proportion, every detail exists because it must. We remove until removal itself would be a loss.</p>
+            </div>
+            <div class="value-card fade-up" style="transition-delay:.2s;">
+                <div class="value-num">03</div>
+                <h3 class="value-title">Slow Production</h3>
+                <p class="value-text">We release seasonally, in limited quantities. We believe the best clothing is made with time — not scaled for volume, but crafted for permanence.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="founder">THANK YOU</div>
+                        <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div>
+        <p class="copyright">&copy; 2026 Haloi Threads. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script>
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
+    }, { threshold: .08 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    </script>
+</body>
+</html>

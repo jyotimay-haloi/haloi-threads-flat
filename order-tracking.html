@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Order Tracking | Haloi Threads</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .tracking-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 140px var(--gutter) 100px;
+        }
+
+        /* ── HEADER ── */
+        .tracking-header { margin-bottom: 70px; }
+        .tracking-eyebrow { font-size:.65rem; text-transform:uppercase; letter-spacing:.28em; color:var(--accent-muga); display:block; margin-bottom:16px; }
+        .tracking-title { font-size:clamp(2.2rem,6vw,4rem); text-transform:uppercase; font-weight:700; letter-spacing:-.02em; color:#fff; margin-bottom: 12px; }
+
+        /* ── LOOKUP BOX ── */
+        .lookup-box {
+            background: #070707;
+            border: 1px solid var(--border-dim);
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        .lookup-label {
+            font-size: .65rem; text-transform: uppercase;
+            letter-spacing: .22em; color: var(--text-secondary);
+            display: block; margin-bottom: 14px;
+        }
+        .lookup-row { display: flex; gap: 0; }
+        .lookup-input {
+            flex: 1;
+            padding: 15px 18px;
+            background: #111;
+            border: 1px solid var(--border-dim);
+            border-right: none;
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: .85rem;
+            outline: none;
+            transition: border-color .3s;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+        .lookup-input:focus { border-color: var(--accent-muga); }
+        .lookup-input::placeholder { color: #2a2a2a; text-transform: uppercase; }
+        .btn-track {
+            padding: 15px 28px;
+            background: var(--accent-muga);
+            color: #000; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .18em;
+            font-size: .7rem; border: none; cursor: pointer;
+            font-family: var(--font); transition: opacity .3s;
+        }
+        .btn-track:hover { opacity: .85; }
+        .lookup-note {
+            margin-top: 12px;
+            font-size: .62rem; text-transform: uppercase;
+            letter-spacing: .12em; color: #2d2d2d;
+        }
+
+        /* ── ORDER RESULT ── */
+        #tracking-result { display: none; }
+        #tracking-result.show { display: block; }
+
+        .result-summary {
+            background: #070707;
+            border: 1px solid var(--border-dim);
+            padding: 32px 36px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .result-meta-group { display: flex; flex-direction: column; gap: 6px; }
+        .result-meta-label { font-size: .6rem; text-transform: uppercase; letter-spacing: .2em; color: var(--text-secondary); }
+        .result-meta-value { font-size: .88rem; color: #fff; letter-spacing: .06em; }
+        .result-meta-value.accent { color: var(--accent-muga); }
+
+        /* ── PROGRESS TRACKER ── */
+        .progress-section { margin-bottom: 50px; }
+        .progress-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .22em; color: var(--text-secondary); margin-bottom: 32px; display: block; }
+
+        .progress-track {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .progress-track::before {
+            content: '';
+            position: absolute;
+            top: 18px; left: 0; right: 0;
+            height: 1px;
+            background: rgba(255,255,255,.06);
+            z-index: 0;
+        }
+        .progress-fill {
+            position: absolute;
+            top: 18px; left: 0;
+            height: 1px;
+            background: var(--accent-muga);
+            z-index: 1;
+            transition: width 1.5s var(--ease-luxury);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        .step-dot {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.08);
+            background: #030303;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .7rem;
+            color: #333;
+            transition: all .6s var(--ease-luxury);
+        }
+        .step-dot.done {
+            background: var(--accent-muga);
+            border-color: var(--accent-muga);
+            color: #000;
+            font-weight: 700;
+        }
+        .step-dot.current {
+            border-color: var(--accent-muga);
+            color: var(--accent-muga);
+            box-shadow: 0 0 20px rgba(158,143,107,.25);
+        }
+        .step-label {
+            font-size: .6rem; text-transform: uppercase;
+            letter-spacing: .14em; color: #333; text-align: center;
+            transition: color .6s;
+        }
+        .step-label.done, .step-label.current { color: var(--text-secondary); }
+        .step-date { font-size: .55rem; color: #2a2a2a; text-align: center; }
+
+        /* ── ORDER ITEMS ── */
+        .items-section { margin-bottom: 50px; }
+        .items-header { font-size: .65rem; text-transform: uppercase; letter-spacing: .22em; color: var(--text-secondary); margin-bottom: 20px; }
+        .tracking-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,.03);
+            align-items: center;
+        }
+        .tracking-item-img {
+            width: 60px; height: 76px;
+            background: #0c0c0c;
+            border: 1px solid rgba(255,255,255,.03);
+            flex-shrink: 0;
+        }
+        .tracking-item-info { flex: 1; }
+        .tracking-item-name { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: #fff; margin-bottom: 5px; }
+        .tracking-item-variant { font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; color: var(--text-secondary); }
+        .tracking-item-price { font-size: .78rem; color: var(--accent-muga); }
+
+        /* ── DELIVERY INFO ── */
+        .delivery-section {
+            background: #070707;
+            border: 1px solid var(--border-dim);
+            padding: 28px 32px;
+            margin-bottom: 40px;
+        }
+        .delivery-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: .75rem;
+            color: var(--text-secondary);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,.03);
+            letter-spacing: .06em;
+        }
+        .delivery-row:last-child { border-bottom: none; }
+        .delivery-row span:last-child { color: var(--text-primary); text-align: right; }
+
+        /* ── NOT FOUND ── */
+        #tracking-notfound { display: none; }
+        #tracking-notfound.show { display: block; }
+        .notfound-box {
+            border: 1px solid rgba(255,255,255,.05);
+            padding: 50px;
+            text-align: center;
+        }
+        .notfound-box h3 { font-size: .9rem; text-transform: uppercase; letter-spacing: .15em; color: #333; margin-bottom: 12px; }
+        .notfound-box p  { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: #2a2a2a; }
+
+        @media (max-width: 600px) {
+            .result-summary { flex-direction: column; }
+            .lookup-row { flex-direction: column; }
+            .lookup-input { border-right: 1px solid var(--border-dim); border-bottom: none; }
+            .btn-track { width: 100%; }
+            .progress-track { gap: 4px; }
+            .step-label { font-size: .5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="central-thread"><div class="thread-pulse"></div></div>
+
+    <!-- CART DRAWER -->
+    <div id="cart-overlay" onclick="HaloiCart.close()"></div>
+    <div id="cart-drawer">
+        <div class="cart-header">
+            <span class="cart-title">Your Selection</span>
+            <div class="close-cart" onclick="HaloiCart.close()">✕</div>
+        </div>
+        <div id="cart-items-wrapper" class="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+            <div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="cart-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+            <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div id="checkout-modal"><div class="checkout-box" id="checkout-box"></div></div>
+
+    <!-- NAV -->
+    <nav id="main-nav">
+        <a href="index.html" class="nav-logo">Haloi Threads</a>
+        <div class="nav-links">
+            <a href="collection.html" class="nav-item">Collection</a>
+            <a href="shop.html" class="nav-item">Shop</a>
+            <a href="about.html" class="nav-item">About</a>
+            <a href="contact.html" class="nav-item">Contact</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="nav-cart-btn">Account</a>
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">Cart <span id="nav-cart-count">(0)</span></button>
+            <div class="nav-hamburger" onclick="document.getElementById('main-nav').classList.toggle('nav-mobile-open')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="tracking-wrapper">
+        <!-- HEADER -->
+        <div class="tracking-header fade-up">
+            <span class="tracking-eyebrow">Haloi Threads</span>
+            <h1 class="tracking-title">Order Tracking</h1>
+        </div>
+
+        <!-- LOOKUP -->
+        <div class="lookup-box fade-up" style="transition-delay:.1s;">
+            <span class="lookup-label">Enter your Order ID or Razorpay Payment ID</span>
+            <div class="lookup-row">
+                <input type="text" class="lookup-input" id="track-input" placeholder="HT-00001  or  pay_xxxxxxxx">
+                <button class="btn-track" onclick="trackOrder()">Track</button>
+            </div>
+            <p class="lookup-note">Order ID can be found in your confirmation email or profile page.</p>
+        </div>
+
+        <!-- RESULT -->
+        <div id="tracking-result">
+            <div class="result-summary fade-up">
+                <div class="result-meta-group">
+                    <span class="result-meta-label">Order ID</span>
+                    <span class="result-meta-value accent" id="res-order-id">—</span>
+                </div>
+                <div class="result-meta-group">
+                    <span class="result-meta-label">Order Date</span>
+                    <span class="result-meta-value" id="res-date">—</span>
+                </div>
+                <div class="result-meta-group">
+                    <span class="result-meta-label">Payment</span>
+                    <span class="result-meta-value" id="res-payment">—</span>
+                </div>
+                <div class="result-meta-group">
+                    <span class="result-meta-label">Order Total</span>
+                    <span class="result-meta-value" id="res-total">—</span>
+                </div>
+                <div class="result-meta-group">
+                    <span class="result-meta-label">Status</span>
+                    <span class="result-meta-value accent" id="res-status">—</span>
+                </div>
+            </div>
+
+            <!-- PROGRESS -->
+            <div class="progress-section fade-up" style="transition-delay:.15s;">
+                <span class="progress-label">Shipment Progress</span>
+                <div class="progress-track" id="progress-track">
+                    <div class="progress-fill" id="progress-fill"></div>
+                    <!-- Steps injected by JS -->
+                </div>
+            </div>
+
+            <!-- DELIVERY INFO -->
+            <div class="delivery-section fade-up" style="transition-delay:.2s;">
+                <div class="delivery-row"><span>Shipping Address</span><span id="res-addr">—</span></div>
+                <div class="delivery-row"><span>Carrier</span><span>Delhivery / India Post</span></div>
+                <div class="delivery-row"><span>Estimated Delivery</span><span id="res-eta">—</span></div>
+                <div class="delivery-row"><span>Tracking Number</span><span id="res-trackno">—</span></div>
+            </div>
+
+            <!-- ITEMS -->
+            <div class="items-section fade-up" style="transition-delay:.25s;">
+                <div class="items-header">Items in This Order</div>
+                <div id="res-items"></div>
+            </div>
+
+            <a href="shop.html" class="btn-luxury" style="opacity:1;display:inline-block;">Continue Shopping</a>
+        </div>
+
+        <!-- NOT FOUND -->
+        <div id="tracking-notfound">
+            <div class="notfound-box">
+                <h3>Order Not Found</h3>
+                <p>We couldn't find an order matching that ID.<br>Please check and try again, or contact us at support@haloithreads.com</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="founder">THANK YOU</div>
+                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div>
+        <p class="copyright">&copy; 2026 Haloi Threads. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script>
+    const STEPS = [
+        { key: 'placed',     label: 'Order\nPlaced',   icon: '✓' },
+        { key: 'confirmed',  label: 'Payment\nConfirmed', icon: '₹' },
+        { key: 'packed',     label: 'Packed',          icon: '◻' },
+        { key: 'shipped',    label: 'Shipped',          icon: '→' },
+        { key: 'delivered',  label: 'Delivered',        icon: '⌂' }
+    ];
+
+    const STATUS_STEP = {
+        'processing': 1,
+        'confirmed':  2,
+        'packed':     2,
+        'shipped':    3,
+        'delivered':  4,
+        'out for delivery': 3
+    };
+
+    /* ── Auto-load from URL param ── */
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) {
+            document.getElementById('track-input').value = 'HT-' + String(id).padStart(5,'0');
+            trackOrder();
+        }
+
+        /* Scroll reveal */
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
+        }, { threshold: .08 });
+        document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    });
+
+    function trackOrder() {
+        const raw   = document.getElementById('track-input').value.trim().toUpperCase();
+        const result= document.getElementById('tracking-result');
+        const nf    = document.getElementById('tracking-notfound');
+        result.classList.remove('show');
+        nf.classList.remove('show');
+
+        /* Search saved orders */
+        const orders = JSON.parse(localStorage.getItem('ht_orders') || '[]');
+        let order = null;
+
+        /* Try matching by HT-XXXXX id or Razorpay ID */
+        const numMatch = raw.replace('HT-','').replace(/^0+/,'');
+        order = orders.find(o =>
+            String(o.id) === numMatch ||
+            (o.paymentId && o.paymentId.toUpperCase() === raw)
+        );
+
+        /* Demo fallback for showcase */
+        if (!order && (raw === 'HT-00001' || raw === 'DEMO')) {
+            order = {
+                id: 1,
+                date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }),
+                total: 7200,
+                status: 'Shipped',
+                paymentId: 'pay_Demo12345678',
+                items: [
+                    { name: 'Core Box Tee', qty: 1, price: 2400, variant: 'Size M' },
+                    { name: 'Base Trouser', qty: 1, price: 4800, variant: 'Size L' }
+                ],
+                address: 'Nagaon, Assam — 782001',
+                trackingNo: 'DL4729183746IN'
+            };
+        }
+
+        if (!order) { nf.classList.add('show'); return; }
+
+        /* Populate summary */
+        document.getElementById('res-order-id').innerText = '#HT-' + String(order.id).padStart(5,'0');
+        document.getElementById('res-date').innerText     = order.date;
+        document.getElementById('res-payment').innerText  = order.paymentId || 'Paid';
+        document.getElementById('res-total').innerText    = '₹' + new Intl.NumberFormat('en-IN').format(order.total);
+        document.getElementById('res-status').innerText   = order.status;
+
+        /* Delivery info */
+        const addrs = JSON.parse(localStorage.getItem('ht_addresses') || '[]');
+        const defAddr = addrs.find(a => a.isDefault);
+        document.getElementById('res-addr').innerText    = order.address || (defAddr ? `${defAddr.city}, ${defAddr.state}` : 'On file');
+        document.getElementById('res-trackno').innerText = order.trackingNo || '— Tracking updated after dispatch';
+
+        /* ETA */
+        const placed = new Date(order.date);
+        const eta    = new Date(placed.getTime() + 7 * 24 * 60 * 60 * 1000);
+        document.getElementById('res-eta').innerText = eta.toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+        /* Progress steps */
+        const statusKey   = (order.status || '').toLowerCase();
+        const currentStep = STATUS_STEP[statusKey] ?? 1;
+        const fillPct     = (currentStep / (STEPS.length - 1)) * 100;
+
+        const track = document.getElementById('progress-track');
+        document.getElementById('progress-fill').style.width = fillPct + '%';
+
+        /* Remove old steps */
+        track.querySelectorAll('.progress-step').forEach(s => s.remove());
+
+        STEPS.forEach((step, i) => {
+            const div   = document.createElement('div');
+            div.className = 'progress-step';
+            const isDone = i < currentStep;
+            const isCur  = i === currentStep;
+            div.innerHTML = `
+                <div class="step-dot ${isDone ? 'done' : (isCur ? 'current' : '')}">${isDone ? '✓' : step.icon}</div>
+                <div class="step-label ${isDone ? 'done' : (isCur ? 'current' : '')}">${step.label.replace('\n','<br>')}</div>
+            `;
+            track.appendChild(div);
+        });
+
+        /* Items */
+        document.getElementById('res-items').innerHTML = (order.items || []).map(it => `
+        <div class="tracking-item">
+            <div class="tracking-item-img"></div>
+            <div class="tracking-item-info">
+                <div class="tracking-item-name">${it.name}</div>
+                <div class="tracking-item-variant">${it.variant || ''}</div>
+            </div>
+            <div class="tracking-item-price">₹${new Intl.NumberFormat('en-IN').format(it.price * it.qty)} &times; ${it.qty}</div>
+        </div>`).join('');
+
+        result.classList.add('show');
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        /* Trigger fade-up on new elements */
+        setTimeout(() => {
+            result.querySelectorAll('.fade-up').forEach(el => el.classList.add('active'));
+        }, 100);
+    }
+
+    document.getElementById('track-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') trackOrder();
+    });
+    </script>
+</body>
+</html>

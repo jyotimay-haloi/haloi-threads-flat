@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Collections | Haloi Threads</title>
+    <meta name="description" content="Explore the Haloi Threads seasonal collections. Each series represents a distinct state of mind.">
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        /* ── COLLECTIONS PAGE STYLES ── */
+
+        /* Collections Grid */
+        .collections-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        .collections-statement {
+            margin-top: 20px;
+            color: var(--text-secondary);
+            letter-spacing: .18em;
+            font-size: .75rem;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.04);
+        }
+
+        .collection-card {
+            position: relative;
+            padding: 70px 50px;
+            background: #060606;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            min-height: 280px;
+            transition: background .6s var(--ease-luxury);
+            border: 1px solid transparent;
+        }
+        .collection-card:hover {
+            background: #0c0c0c;
+            border-color: rgba(158,143,107,.1);
+        }
+
+        /* Animated gradient on hover */
+        .collection-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, transparent 60%, rgba(158,143,107,.05));
+            opacity: 0;
+            transition: opacity .6s ease;
+        }
+        .collection-card:hover::before { opacity: 1; }
+
+        .card-index {
+            position: absolute;
+            top: 30px; left: 50px;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            color: rgba(255,255,255,.04);
+            line-height: 1;
+            letter-spacing: -.03em;
+            transition: color .6s ease;
+        }
+        .collection-card:hover .card-index { color: rgba(158,143,107,.1); }
+
+        .card-content { position: relative; z-index: 2; }
+        .col-card-name {
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .col-card-meaning {
+            display: block;
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .2em;
+            color: var(--text-secondary);
+        }
+
+        .card-arrow {
+            position: relative; z-index: 2;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,.15);
+            transition: color .4s ease, transform .4s ease;
+        }
+        .collection-card:hover .card-arrow {
+            color: var(--accent-muga);
+            transform: translateX(6px);
+        }
+
+        /* ── COLLECTION DETAIL VIEW ── */
+        .detail-meta {
+            max-width: 700px;
+            margin-bottom: 80px;
+        }
+        .detail-name {
+            margin: 16px 0 24px;
+            color: #fff;
+        }
+        .detail-philosophical {
+            font-size: clamp(.9rem, 1.6vw, 1.1rem);
+            color: var(--accent-muga);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .detail-description {
+            font-size: .88rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            letter-spacing: .06em;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+        }
+
+        /* ── PRODUCT VIEW (PVP) ── */
+        .pvp-layout {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .pvp-visual-container {
+            background: #060606;
+            aspect-ratio: .9;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,.02);
+            position: relative;
+            overflow: hidden;
+        }
+        .pvp-visual-container .product-garment {
+            width: 42%; height: 58%;
+        }
+        .pvp-details {
+            display: flex; flex-direction: column;
+            gap: 48px;
+        }
+        .pvp-header-box {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .pvp-col-ref {
+            color: var(--accent-muga);
+            font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+        }
+        .pvp-title {
+            font-size: clamp(1.8rem, 4vw, 3.5rem);
+            text-transform: uppercase; line-height: 1;
+            color: #fff; font-weight: 700;
+        }
+        .pvp-price {
+            font-size: 1.4rem;
+            color: #fff; letter-spacing: .05em;
+        }
+        .pvp-description {
+            font-size: .86rem;
+            color: var(--text-secondary);
+            line-height: 1.85; letter-spacing: .05em;
+        }
+        .pvp-selection-group {
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .size-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+        .size-option {
+            width: 48px; height: 48px;
+            border: 1px solid rgba(255,255,255,.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: .72rem; font-family: var(--font);
+            cursor: pointer; color: var(--text-secondary);
+            transition: all .35s ease; text-transform: uppercase;
+        }
+        .size-option:hover { border-color: rgba(255,255,255,.4); color: #fff; }
+        .size-option.selected { background: #fff; color: #000; border-color: #fff; }
+
+        .pvp-actions { display: flex; flex-direction: column; gap: 12px; }
+        .btn-buy-now {
+            width: 100%; padding: 18px;
+            background: var(--accent-muga);
+            color: #000; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .22em;
+            font-size: .72rem; cursor: pointer; border: none;
+            font-family: var(--font);
+            transition: opacity .3s, transform .3s;
+        }
+        .btn-buy-now:hover { opacity: .85; transform: translateY(-2px); }
+        .btn-add-cart {
+            width: 100%; padding: 18px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,.1);
+            color: var(--text-primary);
+            text-transform: uppercase; letter-spacing: .22em;
+            font-size: .72rem; cursor: pointer;
+            font-family: var(--font);
+            transition: border-color .4s, color .4s;
+        }
+        .btn-add-cart:hover { border-color: var(--accent-muga); color: var(--accent-muga); }
+
+        /* Scanline hover effect on collection cards */
+        @keyframes scanline {
+            0%   { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @media (max-width: 900px) {
+            .collections-grid { grid-template-columns: 1fr; }
+            .collection-card { min-height: 200px; padding: 50px 30px; }
+            .card-index { left: 30px; top: 20px; }
+            .pvp-layout { grid-template-columns: 1fr; gap: 40px; }
+            .pvp-visual-container { height: 300px; }
+        }
+        @media (max-width: 600px) {
+            .product-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NO INTRO on Collection page (Home-only) -->
+
+    <!-- THREAD PULSE -->
+    <div class="central-thread"><div class="thread-pulse"></div></div>
+
+    <!-- CART DRAWER -->
+    <div id="cart-overlay" onclick="HaloiCart.close()"></div>
+    <div id="cart-drawer">
+        <div class="cart-header">
+            <span class="cart-title">Your Selection</span>
+            <div class="close-cart" onclick="HaloiCart.close()">✕</div>
+        </div>
+        <div id="cart-items-wrapper" class="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+            <div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="cart-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+            <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal">
+        <div class="checkout-box" id="checkout-box"></div>
+    </div>
+
+    <!-- NAV -->
+    <nav id="main-nav">
+        <a href="index.html" class="nav-logo">Haloi Threads</a>
+        <div class="nav-links">
+            <a href="collection.html" class="nav-item" style="color:#fff;">Collection</a>
+            <a href="shop.html" class="nav-item">Shop</a>
+            <a href="about.html" class="nav-item">About</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="nav-cart-btn" id="nav-acct-link">Account</a>
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">
+                Cart <span id="nav-cart-count">(0)</span>
+            </button>
+            <div class="nav-hamburger" onclick="toggleMobileNav()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- COLLECTIONS VIEW -->
+        <section id="view-collections" class="view-section">
+            <div class="collections-header fade-up">
+                <div class="text-label" style="margin-bottom:16px;">Artifact Series</div>
+                <h1 class="text-display">Collections</h1>
+                <p class="collections-statement">"Each collection represents a distinct state of mind."</p>
+            </div>
+
+            <div class="collections-grid">
+                <div class="collection-card fade-up" onclick="app.openCollection('core')" style="transition-delay:.1s;">
+                    <div class="card-index">01</div>
+                    <div class="card-content">
+                        <h2 class="col-card-name">Core / Uniform</h2>
+                        <span class="col-card-meaning">The Foundation of Silence</span>
+                    </div>
+                    <span class="card-arrow">→</span>
+                </div>
+
+                <div class="collection-card fade-up" onclick="app.openCollection('silence')" style="transition-delay:.2s;">
+                    <div class="card-index">02</div>
+                    <div class="card-content">
+                        <h2 class="col-card-name">Silence Form</h2>
+                        <span class="col-card-meaning">Structure Without Noise</span>
+                    </div>
+                    <span class="card-arrow">→</span>
+                </div>
+
+                <div class="collection-card fade-up" onclick="app.openCollection('shadow')" style="transition-delay:.3s;">
+                    <div class="card-index">03</div>
+                    <div class="card-content">
+                        <h2 class="col-card-name">Shadow State</h2>
+                        <span class="col-card-meaning">The Luxury of Absence</span>
+                    </div>
+                    <span class="card-arrow">→</span>
+                </div>
+
+                <div class="collection-card fade-up" onclick="app.openCollection('origin')" style="transition-delay:.4s;">
+                    <div class="card-index">04</div>
+                    <div class="card-content">
+                        <h2 class="col-card-name">Origin Thread</h2>
+                        <span class="col-card-meaning">Woven from Heritage</span>
+                    </div>
+                    <span class="card-arrow">→</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLLECTION DETAIL VIEW -->
+        <section id="view-detail" class="view-section">
+            <button class="btn-back" onclick="app.showView('collections')">Back to Collections</button>
+            <div id="detail-render"></div>
+        </section>
+
+        <!-- PRODUCT VIEW PAGE -->
+        <section id="view-pvp" class="view-section">
+            <button class="btn-back" id="btn-back-to-detail">Back to Collection</button>
+            <div id="pvp-render"></div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="founder">THANK YOU</div>
+                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div>
+        <p class="copyright">&copy; 2026 Haloi Threads. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script>
+    /* ── COLLECTION DATA ── */
+    const DATA = {
+        collections: {
+            core: {
+                name: "Core / Uniform",
+                philosophical: "Identity is found in the subtraction of noise.",
+                desc: "An archive of permanence. Designed to be the definitive base of a minimalist wardrobe. Heavyweight fabrics meeting structural integrity — the uniform for the quiet confident.",
+                products: [
+                    { id:"c1", name:"Uniform Hoodie",   sub:"450GSM Loopback",   price: 4800 },
+                    { id:"c2", name:"Core Box Tee",     sub:"Heavy Jersey",       price: 2400 },
+                    { id:"c3", name:"Base Trouser",     sub:"Technical Twill",    price: 5200 },
+                    { id:"c4", name:"Essential Shell",  sub:"Matte Nylon",        price: 7500 }
+                ]
+            },
+            silence: {
+                name: "Silence Form",
+                philosophical: "The body is the first architecture we inhabit.",
+                desc: "Inspired by brutalist geometry. Silence Form explores the relationship between rigid lines and the human silhouette. Every seam is a boundary between the self and the void.",
+                products: [
+                    { id:"s1", name:"Structure Jacket", sub:"Matte Outerwear",     price: 9500 },
+                    { id:"s2", name:"Form Shirt",       sub:"Asymmetric Poplin",   price: 4200 },
+                    { id:"s3", name:"Linear Pant",      sub:"Wide Cut Wool",       price: 6400 },
+                    { id:"s4", name:"Boundary Vest",    sub:"Padded Technical",    price: 5800 }
+                ]
+            },
+            shadow: {
+                name: "Shadow State",
+                philosophical: "Darkness is not an absence, but a presence.",
+                desc: "An exploration of black in all its depths. Distorted silhouettes that create a presence felt rather than seen. Designed for the observers of the city.",
+                products: [
+                    { id:"sh1", name:"Void Parka",    sub:"Carbon Canvas",      price: 14500 },
+                    { id:"sh2", name:"Shadow Knit",   sub:"Merino Blend",       price:  6800 },
+                    { id:"sh3", name:"Ghost Cargo",   sub:"Matte Sateen",       price:  8200 },
+                    { id:"sh4", name:"Eclipse Layer", sub:"Sheer Tech Mesh",    price:  3500 }
+                ]
+            },
+            origin: {
+                name: "Origin Thread",
+                philosophical: "Our future is woven from the ghosts of our past.",
+                desc: "The bridge between history and the street. Traditional Assamese hand-spun textures meeting oversized silhouettes. Woven by hand, finished by the city soul.",
+                products: [
+                    { id:"o1", name:"Heritage Noragi",  sub:"Muga Silk Blend",      price: 11200 },
+                    { id:"o2", name:"Origin Tote",      sub:"Heavy Canvas",          price:  3800 },
+                    { id:"o3", name:"Loom Overshirt",   sub:"Hand-dyed Indigo",      price:  5600 },
+                    { id:"o4", name:"Brahma Trouser",   sub:"Woven Slub Cotton",     price:  4900 }
+                ]
+            }
+        }
+    };
+
+    /* ── APP ── */
+    const app = {
+        state: { currentColId: null, currentProdId: null, selectedSize: 'M' },
+
+        init() {
+            this.showView('collections');
+            // Scroll reveal
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
+            }, { threshold: .08 });
+            document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+        },
+
+        showView(viewId) {
+            document.querySelectorAll('.view-section').forEach(s => {
+                s.classList.remove('active');
+                setTimeout(() => { if (!s.classList.contains('active')) s.style.display = 'none'; }, 100);
+            });
+            const target = document.getElementById('view-' + viewId);
+            if (target) {
+                target.style.display = 'block';
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        target.classList.add('active');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                });
+            }
+        },
+
+        openCollection(colId) {
+            this.state.currentColId = colId;
+            const col = DATA.collections[colId];
+            const productsHTML = col.products.map((p, i) => `
+                <div class="product-card fade-up" onclick="app.openProduct('${p.id}')"
+                     style="transition-delay:${i * 0.07}s;">
+                    <div class="product-visual">
+                        <div class="product-inset-border"></div>
+                        <div class="product-garment" style="background:#151515;"></div>
+                    </div>
+                    <div class="product-info">
+                        <span class="prod-col-ref">${col.name}</span>
+                        <h3 class="prod-title">${p.name}</h3>
+                        <div class="prod-sub-meta">
+                            <span class="prod-sub">${p.sub}</span>
+                            <span class="prod-price">₹${new Intl.NumberFormat('en-IN').format(p.price)}</span>
+                        </div>
+                    </div>
+                </div>`).join('');
+
+            document.getElementById('detail-render').innerHTML = `
+                <div class="detail-meta fade-up">
+                    <span class="text-label accent-text">Artifact Series — ${String(Object.keys(DATA.collections).indexOf(colId)+1).padStart(2,'0')}</span>
+                    <h1 class="text-display detail-name">${col.name}</h1>
+                    <p class="detail-philosophical">${col.philosophical}</p>
+                    <p class="detail-description">${col.desc}</p>
+                </div>
+                <div class="product-grid">${productsHTML}</div>`;
+            // Re-attach observer for dynamically rendered elements
+            const detailObs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); detailObs.unobserve(e.target); } });
+            }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+            document.querySelectorAll('#detail-render .fade-up').forEach(el => detailObs.observe(el));
+            this.showView('detail');
+        },
+
+        openProduct(prodId) {
+            this.state.currentProdId = prodId;
+            this.state.selectedSize  = 'M';
+            const colId = this.state.currentColId;
+            const col   = DATA.collections[colId];
+            const prod  = col.products.find(p => p.id === prodId);
+            const fmtPrice = new Intl.NumberFormat('en-IN').format(prod.price);
+
+            document.getElementById('btn-back-to-detail').onclick = () => this.openCollection(colId);
+
+            document.getElementById('pvp-render').innerHTML = `
+                <div class="pvp-layout">
+                    <div class="pvp-visual-container">
+                        <div class="product-garment" style="background:#151515;"></div>
+                    </div>
+                    <div class="pvp-details">
+                        <div class="pvp-header-box">
+                            <span class="pvp-col-ref">${col.name}</span>
+                            <h1 class="pvp-title">${prod.name}</h1>
+                            <span class="pvp-price">₹${fmtPrice}</span>
+                        </div>
+                        <p class="pvp-description">
+                            A signature piece from the ${col.name} collection. 
+                            ${prod.sub} — designed with absolute intent, featuring custom construction 
+                            and premium materials. Every thread is a deliberate choice.
+                        </p>
+                        <div class="pvp-selection-group">
+                            <span class="text-label">Size Selection</span>
+                            <div class="size-grid" id="size-grid-pvp">
+                                ${['XS','S','M','L','XL','XXL'].map(s => `
+                                <div class="size-option${s==='M'?' selected':''}"
+                                     onclick="app.selectSize('${s}')" id="sz-${s}">${s}</div>`).join('')}
+                            </div>
+                        </div>
+                        <div class="pvp-actions">
+                            <button class="btn-buy-now" onclick="app.buyNow('${prod.id}','${prod.name}',${prod.price})">
+                                Buy Now — ₹${fmtPrice}
+                            </button>
+                            <button class="btn-add-cart" onclick="app.addToCart('${prod.id}','${prod.name}',${prod.price})">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            this.showView('pvp');
+        },
+
+        selectSize(size) {
+            this.state.selectedSize = size;
+            document.querySelectorAll('#size-grid-pvp .size-option').forEach(el => el.classList.remove('selected'));
+            const el = document.getElementById('sz-' + size);
+            if (el) el.classList.add('selected');
+        },
+
+        addToCart(id, name, price) {
+            HaloiCart.add({ id, name, price, variant: 'Size ' + this.state.selectedSize });
+        },
+
+        buyNow(id, name, price) {
+            HaloiCart.add({ id, name, price, variant: 'Size ' + this.state.selectedSize });
+            setTimeout(() => HaloiCart.openCheckout(), 400);
+        }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => app.init());
+
+    function toggleMobileNav() {
+        document.getElementById('main-nav').classList.toggle('nav-mobile-open');
+    }
+    </script>
+</body>
+</html>

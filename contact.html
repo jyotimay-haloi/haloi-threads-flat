@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contact | Haloi Threads</title>
+    <meta name="description" content="Contact Haloi Threads. For genuine enquiries and order-related assistance.">
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .contact-wrapper {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 140px var(--gutter) 100px;
+        }
+
+        /* ── HEADER ── */
+        .contact-page-header {
+            text-align: center;
+            margin-bottom: 90px;
+        }
+        .contact-tagline {
+            font-size: clamp(.9rem, 1.6vw, 1.1rem);
+            color: var(--accent-muga);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-top: 18px;
+            font-style: italic;
+        }
+
+        /* ── TWO-COL LAYOUT ── */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: start;
+            margin-bottom: 100px;
+        }
+
+        /* ── FORM SIDE ── */
+        .contact-form-section {}
+        .contact-form-label {
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .25em;
+            color: var(--accent-muga);
+            display: block;
+            margin-bottom: 32px;
+        }
+        .contact-field {
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .contact-field label {
+            display: block;
+            font-size: .6rem;
+            text-transform: uppercase;
+            letter-spacing: .22em;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        .contact-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+            padding: 12px 0;
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: .9rem;
+            outline: none;
+            transition: border-color .4s var(--ease-luxury);
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+        .contact-input:focus { border-bottom-color: var(--accent-muga); }
+        .contact-input::placeholder { color: #2d2d2d; font-size: .8rem; }
+        textarea.contact-input { resize: none; min-height: 110px; }
+
+        .contact-select-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+        .btn-send {
+            padding: 16px 48px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: transparent;
+            color: #fff;
+            font-family: var(--font);
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .22em;
+            cursor: pointer;
+            transition: all .4s var(--ease-luxury);
+            margin-top: 8px;
+        }
+        .btn-send:hover { border-color: var(--accent-muga); color: var(--accent-muga); }
+
+        .form-success {
+            display: none;
+            padding: 24px;
+            border: 1px solid rgba(158,143,107,.3);
+            margin-top: 20px;
+        }
+        .form-success.show { display: block; }
+        .form-success p {
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            color: var(--accent-muga);
+        }
+
+        /* ── INFO SIDE ── */
+        .contact-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+        .contact-info-block {}
+        .info-block-label {
+            font-size: .6rem;
+            text-transform: uppercase;
+            letter-spacing: .28em;
+            color: var(--accent-muga);
+            display: block;
+            margin-bottom: 16px;
+        }
+        .info-block-value {
+            font-size: .9rem;
+            color: #fff;
+            letter-spacing: .05em;
+            margin-bottom: 8px;
+        }
+        .info-block-desc {
+            font-size: .75rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .info-block-link {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            color: var(--accent-muga);
+            border-bottom: 1px solid transparent;
+            transition: border-color .3s;
+        }
+        .info-block-link:hover { border-color: var(--accent-muga); }
+
+        /* FAQ */
+        .faq-section {
+            border-top: 1px solid var(--border-dim);
+            padding-top: 80px;
+            margin-bottom: 80px;
+        }
+        .faq-header { margin-bottom: 50px; text-align: center; }
+        .faq-title { font-size: clamp(1.4rem, 3vw, 2.2rem); text-transform: uppercase; font-weight: 700; color: #fff; }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-dim);
+        }
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 0;
+            cursor: pointer;
+            font-family: var(--font);
+            color: var(--text-primary);
+            font-size: .82rem;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            text-align: left;
+            background: transparent;
+            border: none;
+            transition: color .3s;
+        }
+        .faq-question:hover { color: var(--accent-muga); }
+        .faq-icon { font-size: .8rem; color: #444; transition: transform .4s var(--ease-luxury); flex-shrink: 0; }
+        .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--accent-muga); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .6s var(--ease-luxury), padding .4s;
+        }
+        .faq-item.open .faq-answer { max-height: 300px; padding-bottom: 20px; }
+        .faq-answer p {
+            font-size: .78rem;
+            line-height: 1.85;
+            color: var(--text-secondary);
+            letter-spacing: .05em;
+        }
+
+        @media (max-width: 900px) {
+            .contact-layout { grid-template-columns: 1fr; gap: 60px; }
+            .contact-select-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="central-thread"><div class="thread-pulse"></div></div>
+
+    <!-- CART DRAWER -->
+    <div id="cart-overlay" onclick="HaloiCart.close()"></div>
+    <div id="cart-drawer">
+        <div class="cart-header">
+            <span class="cart-title">Your Selection</span>
+            <div class="close-cart" onclick="HaloiCart.close()">✕</div>
+        </div>
+        <div id="cart-items-wrapper" class="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+            <div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="cart-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+            <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div id="checkout-modal"><div class="checkout-box" id="checkout-box"></div></div>
+
+    <!-- NAV -->
+    <nav id="main-nav">
+        <a href="index.html" class="nav-logo">Haloi Threads</a>
+        <div class="nav-links">
+            <a href="collection.html" class="nav-item">Collection</a>
+            <a href="shop.html" class="nav-item">Shop</a>
+            <a href="about.html" class="nav-item">About</a>
+            <a href="contact.html" class="nav-item" style="color:#fff;">Contact</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="nav-cart-btn">Account</a>
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">Cart <span id="nav-cart-count">(0)</span></button>
+            <div class="nav-hamburger" onclick="document.getElementById('main-nav').classList.toggle('nav-mobile-open')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="contact-wrapper">
+
+        <!-- HEADER -->
+        <div class="contact-page-header fade-up">
+            <span class="text-label" style="margin-bottom:16px;display:block;">Get in Touch</span>
+            <h1 class="text-display">Contact</h1>
+            <p class="contact-tagline">For genuine enquiries and order-related assistance.</p>
+        </div>
+
+        <!-- TWO-COL LAYOUT -->
+        <div class="contact-layout">
+
+            <!-- FORM -->
+            <div class="contact-form-section fade-up" style="transition-delay:.1s;">
+                <span class="contact-form-label">Send a Message</span>
+                <div class="contact-field">
+                    <label for="cf-name">Full Name</label>
+                    <input type="text" class="contact-input" id="cf-name" placeholder="Your full name" required>
+                </div>
+                <div class="contact-field">
+                    <label for="cf-email">Email Address</label>
+                    <input type="email" class="contact-input" id="cf-email" placeholder="your@email.com" required>
+                </div>
+                <div class="contact-select-row">
+                    <div class="contact-field">
+                        <label for="cf-phone">Phone (Optional)</label>
+                        <input type="tel" class="contact-input" id="cf-phone" placeholder="+91 98765 43210">
+                    </div>
+                    <div class="contact-field">
+                        <label for="cf-subject">Subject</label>
+                        <select class="contact-input" id="cf-subject" style="cursor:pointer;background:#030303;color:#666;">
+                            <option value="">Select topic</option>
+                            <option>Order Enquiry</option>
+                            <option>Return / Exchange</option>
+                            <option>Sizing Help</option>
+                            <option>Wholesale / Collab</option>
+                            <option>Press</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="contact-field">
+                    <label for="cf-order">Order ID (If applicable)</label>
+                    <input type="text" class="contact-input" id="cf-order" placeholder="HT-00001">
+                </div>
+                <div class="contact-field">
+                    <label for="cf-message">Message</label>
+                    <textarea class="contact-input" id="cf-message" placeholder="Your message..." required></textarea>
+                </div>
+                <button class="btn-send" onclick="submitContactForm()">Send Message</button>
+
+                <div class="form-success" id="form-success">
+                    <p>✓ &nbsp; Message received. We'll respond within 48 hours.</p>
+                </div>
+            </div>
+
+            <!-- INFO -->
+            <div class="contact-info-section fade-up" style="transition-delay:.2s;">
+                <div class="contact-info-block">
+                    <span class="info-block-label">Email</span>
+                    <div class="info-block-value">support@haloithreads.com</div>
+                    <p class="info-block-desc">For order, return, and general enquiries.</p>
+                    <a href="mailto:support@haloithreads.com" class="info-block-link">Send Email →</a>
+                </div>
+
+                <div class="contact-info-block">
+                    <span class="info-block-label">Order Tracking</span>
+                    <div class="info-block-value">Track your shipment</div>
+                    <p class="info-block-desc">Use your Order ID or Razorpay Payment ID to track in real time.</p>
+                    <a href="order-tracking.html" class="info-block-link">Track Order →</a>
+                </div>
+
+                <div class="contact-info-block">
+                    <span class="info-block-label">Response Time</span>
+                    <div class="info-block-value">Within 48 Hours</div>
+                    <p class="info-block-desc">We respond to all enquiries within 2 business days. Urgent order issues are prioritised.</p>
+                </div>
+
+                <div class="contact-info-block">
+                    <span class="info-block-label">Based In</span>
+                    <div class="info-block-value">Assam, India</div>
+                    <p class="info-block-desc">Business hours: Monday – Saturday, 10am – 7pm IST.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section">
+            <div class="faq-header fade-up">
+                <h2 class="faq-title">Frequently Asked</h2>
+            </div>
+
+            <div id="faq-list">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="founder">THANK YOU</div>
+                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div>
+        <p class="copyright">&copy; 2026 Haloi Threads. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script>
+    /* ── FAQ DATA ── */
+    const FAQS = [
+        {
+            q: "How long does shipping take?",
+            a: "Standard delivery within India takes 5–7 business days after dispatch. Express delivery (2–3 days) is available at checkout for ₹350. Orders above ₹5,000 receive free standard shipping."
+        },
+        {
+            q: "Can I return or exchange my order?",
+            a: "Yes. We accept returns within 7 days of delivery for items in original, unworn condition with all tags attached. Sale items are final sale. Visit our Returns page for the full policy and to initiate a return."
+        },
+        {
+            q: "How do I track my order?",
+            a: "Visit our Order Tracking page and enter your Order ID (e.g. HT-00001) or your Razorpay Payment ID. A tracking link is also emailed to you once your order is dispatched."
+        },
+        {
+            q: "What sizes do you offer?",
+            a: "Haloi Threads garments are available in XS, S, M, L, XL, and XXL. Our pieces are designed with an intentionally relaxed, oversized silhouette — size down if you prefer a closer fit."
+        },
+        {
+            q: "Do you ship internationally?",
+            a: "International shipping is currently unavailable. We are expanding globally in Q3 2026. You can join our waitlist by emailing international@haloithreads.com."
+        },
+        {
+            q: "What payment methods are accepted?",
+            a: "We accept all major credit and debit cards, UPI, net banking, and wallets — all processed securely through Razorpay. We do not store any payment details on our servers."
+        },
+        {
+            q: "How do I care for my Haloi Threads garments?",
+            a: "Machine wash cold on a gentle cycle. Do not bleach. Dry flat or tumble dry on low. For our premium Muga silk blend pieces, dry cleaning is recommended to preserve the fabric integrity."
+        },
+        {
+            q: "Do you offer wholesale or collaboration opportunities?",
+            a: "Yes, select wholesale and collaboration enquiries are considered. Please use the contact form above with the subject 'Wholesale / Collab' and include details about your business."
+        }
+    ];
+
+    /* Render FAQs */
+    const faqList = document.getElementById('faq-list');
+    faqList.innerHTML = FAQS.map((f, i) => `
+    <div class="faq-item fade-up" style="transition-delay:${i * 0.05}s;" id="faq-${i}">
+        <button class="faq-question" onclick="toggleFaq(${i})">
+            <span>${f.q}</span>
+            <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><p>${f.a}</p></div>
+    </div>`).join('');
+
+    function toggleFaq(i) {
+        const item = document.getElementById('faq-' + i);
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+    }
+
+    /* ── CONTACT FORM ── */
+    function submitContactForm() {
+        const name    = document.getElementById('cf-name').value.trim();
+        const email   = document.getElementById('cf-email').value.trim();
+        const message = document.getElementById('cf-message').value.trim();
+
+        if (!name || !email || !message) {
+            alert('Please fill in your name, email, and message before sending.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        /* In production, this would POST to your backend / Formspree / EmailJS */
+        document.getElementById('form-success').classList.add('show');
+        ['cf-name','cf-email','cf-phone','cf-order','cf-message'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        document.getElementById('cf-subject').selectedIndex = 0;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ── SCROLL REVEAL ── */
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
+    }, { threshold: .06 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Shipping | Haloi Threads</title><link rel="stylesheet" href="design-system.css"><style>.policy-page{max-width:760px;margin:0 auto;padding:140px var(--gutter) 100px}.policy-title{font-size:clamp(2rem,5vw,4rem);text-transform:uppercase;font-weight:700;margin-bottom:60px;border-bottom:1px solid var(--border-dim);padding-bottom:30px}.policy-section{margin-bottom:50px}.policy-h2{font-size:.75rem;text-transform:uppercase;letter-spacing:.25em;color:var(--accent-muga);margin-bottom:16px}.policy-text{font-size:.85rem;line-height:1.9;color:var(--text-secondary);letter-spacing:.04em}.policy-list{list-style:none;margin-top:12px}.policy-list li{font-size:.82rem;line-height:1.8;color:var(--text-secondary);padding-left:20px;position:relative}.policy-list li::before{content:"—";position:absolute;left:0;color:var(--accent-muga)}</style></head><body>
+<div class="central-thread"><div class="thread-pulse"></div></div>
+<nav id="main-nav"><a href="index.html" class="nav-logo">Haloi Threads</a><div class="nav-links"><a href="collection.html" class="nav-item">Collection</a><a href="shop.html" class="nav-item">Shop</a></div><div class="nav-right">
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">Cart <span id="nav-cart-count">(0)</span></button>
+            <div class="nav-hamburger" onclick="document.getElementById('main-nav').classList.toggle('nav-mobile-open')">
+                <span></span><span></span><span></span>
+            </div>
+        </div></nav>
+<div id="cart-overlay" onclick="HaloiCart.close()"></div><div id="cart-drawer"><div class="cart-header"><span class="cart-title">Your Selection</span><div class="close-cart" onclick="HaloiCart.close()">✕</div></div><div id="cart-items-wrapper" class="cart-items-container"></div><div class="cart-footer"><div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">&#8377;0</span></div><div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div><div class="cart-row total"><span>Total</span><span id="cart-total">&#8377;0</span></div><button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button></div></div>
+<div id="checkout-modal"><div class="checkout-box" id="checkout-box"></div></div>
+<main class="policy-page">
+<h1 class="policy-title">Shipping Policy</h1>
+<div class="policy-section"><div class="policy-h2">Domestic Shipping — India</div><p class="policy-text">All orders are processed within 2–3 business days. Standard delivery takes 5–7 business days after dispatch.</p><ul class="policy-list"><li>Orders above ₹5,000 — Free Shipping</li><li>Orders below ₹5,000 — ₹150 flat rate</li><li>Express delivery (2–3 days) — ₹350</li></ul></div>
+<div class="policy-section"><div class="policy-h2">International Shipping</div><p class="policy-text">International orders are currently unavailable. We are expanding globally in Q3 2026. Join our waitlist to be notified.</p></div>
+<div class="policy-section"><div class="policy-h2">Order Tracking</div><p class="policy-text">A tracking link is sent to your registered email once your order is dispatched. All shipments are insured and fully traceable.</p></div>
+<div class="policy-section"><div class="policy-h2">Packaging</div><p class="policy-text">Every order is packed in our signature matte black packaging — minimal, recyclable, and designed to be kept.</p></div>
+</main>
+<footer>                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div><p class="copyright">&copy; 2026 Haloi Threads.</p></footer>
+<script src="cart.js"></script></body></html>

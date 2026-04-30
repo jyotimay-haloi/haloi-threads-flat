@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cart | Haloi Threads</title>
+    <meta name="description" content="Your Haloi Threads cart. Review and proceed to checkout.">
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        /* ── CART PAGE STYLES ── */
+
+        .cart-page-wrapper {
+            min-height: 100vh;
+            padding: 130px var(--gutter) 100px;
+            max-width: var(--max-w);
+            margin: 0 auto;
+        }
+
+        .cart-page-header {
+            margin-bottom: 70px;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .cart-page-title { font-size: clamp(2rem, 6vw, 5rem); text-transform: uppercase; font-weight: 700; letter-spacing: -.02em; }
+        .cart-item-count { font-size: .68rem; text-transform: uppercase; letter-spacing: .2em; color: var(--text-secondary); }
+
+        /* Two-column layout */
+        .cart-page-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 60px;
+            align-items: start;
+        }
+
+        /* Items list */
+        .cart-page-items {}
+        .cart-page-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 28px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-dim);
+            align-items: start;
+        }
+        .cart-page-img {
+            width: 100px; height: 130px;
+            background: #111;
+            overflow: hidden;
+        }
+        .cart-page-img img { width: 100%; height: 100%; object-fit: cover; }
+        .cart-page-info { display: flex; flex-direction: column; gap: 8px; }
+        .cart-page-name { font-size: .9rem; text-transform: uppercase; letter-spacing: .1em; color: #fff; }
+        .cart-page-variant { font-size: .65rem; text-transform: uppercase; letter-spacing: .15em; color: var(--text-secondary); }
+        .cart-page-unit-price { font-size: .75rem; color: var(--text-secondary); letter-spacing: .08em; margin-top: 4px; }
+
+        .cart-page-qty-remove { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+        .cart-page-qty { display: flex; border: 1px solid rgba(255,255,255,.12); }
+        .cart-page-qty-btn {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: #888; font-size: 1rem;
+            transition: color .2s, background .2s;
+        }
+        .cart-page-qty-btn:hover { color: #fff; background: rgba(255,255,255,.05); }
+        .cart-page-qty-val {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: .82rem;
+            border-left: 1px solid rgba(255,255,255,.08);
+            border-right: 1px solid rgba(255,255,255,.08);
+        }
+        .cart-page-price { font-size: .9rem; color: var(--accent-muga); margin-top: 4px; text-align: right; }
+        .cart-page-remove {
+            font-size: .58rem; text-transform: uppercase;
+            letter-spacing: .15em; color: #3a3a3a;
+            cursor: pointer; transition: color .3s;
+        }
+        .cart-page-remove:hover { color: #888; }
+
+        /* Order summary sidebar */
+        .order-summary {
+            background: #070707;
+            border: 1px solid var(--border-dim);
+            padding: 36px;
+            position: sticky;
+            top: 100px;
+        }
+        .summary-title {
+            font-size: .72rem; text-transform: uppercase;
+            letter-spacing: .22em; color: var(--accent-muga);
+            margin-bottom: 28px;
+        }
+        .summary-row {
+            display: flex; justify-content: space-between;
+            font-size: .78rem; color: #666;
+            margin-bottom: 14px;
+            letter-spacing: .05em;
+        }
+        .summary-divider {
+            width: 100%; height: 1px;
+            background: var(--border-dim);
+            margin: 20px 0;
+        }
+        .summary-total {
+            display: flex; justify-content: space-between;
+            font-size: 1rem; color: #fff;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+        .summary-total span:last-child { color: var(--accent-muga); }
+
+        /* Promo code input */
+        .promo-row {
+            display: flex; gap: 0;
+            margin-bottom: 20px;
+        }
+        .promo-input {
+            flex: 1; padding: 12px 16px;
+            background: #111;
+            border: 1px solid rgba(255,255,255,.08);
+            border-right: none;
+            color: var(--text-primary);
+            font-size: .72rem; font-family: var(--font);
+            text-transform: uppercase; letter-spacing: .1em;
+            outline: none;
+        }
+        .promo-input::placeholder { color: #333; }
+        .promo-input:focus { border-color: var(--accent-muga); }
+        .promo-btn {
+            padding: 12px 18px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: .65rem; text-transform: uppercase;
+            letter-spacing: .12em; cursor: pointer;
+            font-family: var(--font); transition: all .3s;
+        }
+        .promo-btn:hover { border-color: var(--accent-muga); color: var(--accent-muga); }
+
+        .btn-checkout-page {
+            width: 100%; padding: 18px;
+            background: var(--accent-muga);
+            color: #000; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .22em;
+            font-size: .72rem; cursor: pointer; border: none;
+            font-family: var(--font);
+            transition: opacity .3s, transform .3s;
+            margin-bottom: 12px;
+        }
+        .btn-checkout-page:hover { opacity: .85; transform: translateY(-2px); }
+        .btn-checkout-page:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+
+        .btn-continue-shop {
+            width: 100%; padding: 16px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,.08);
+            color: var(--text-secondary);
+            font-size: .65rem; text-transform: uppercase;
+            letter-spacing: .15em; cursor: pointer;
+            font-family: var(--font); transition: all .4s;
+        }
+        .btn-continue-shop:hover { border-color: rgba(255,255,255,.2); color: var(--text-primary); }
+
+        .payment-icons {
+            margin-top: 18px;
+            display: flex; gap: 10px; justify-content: center;
+            opacity: .4;
+        }
+        .payment-icon {
+            font-size: .55rem; text-transform: uppercase;
+            letter-spacing: .1em; color: var(--text-secondary);
+            border: 1px solid #222; padding: 4px 8px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+            grid-column: 1 / -1;
+        }
+        .empty-state h2 {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            text-transform: uppercase; letter-spacing: .1em;
+            color: #222; margin-bottom: 20px;
+        }
+        .empty-state p {
+            font-size: .75rem; text-transform: uppercase;
+            letter-spacing: .15em; color: #333;
+            margin-bottom: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .cart-page-layout { grid-template-columns: 1fr; }
+            .order-summary { position: static; }
+        }
+        @media (max-width: 600px) {
+            .cart-page-item { grid-template-columns: 80px 1fr; }
+            .cart-page-qty-remove { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+            .cart-page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- THREAD PULSE -->
+    <div class="central-thread"><div class="thread-pulse"></div></div>
+
+    <!-- CART DRAWER (slide-in, also used from nav) -->
+    <div id="cart-overlay" onclick="HaloiCart.close()"></div>
+    <div id="cart-drawer">
+        <div class="cart-header">
+            <span class="cart-title">Your Selection</span>
+            <div class="close-cart" onclick="HaloiCart.close()">✕</div>
+        </div>
+        <div id="cart-items-wrapper" class="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+            <div class="cart-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+            <div class="cart-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+            <button id="btn-checkout" class="btn-checkout">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal">
+        <div class="checkout-box" id="checkout-box"></div>
+    </div>
+
+    <!-- NAV -->
+    <nav id="main-nav">
+        <a href="index.html" class="nav-logo">Haloi Threads</a>
+        <div class="nav-links">
+            <a href="collection.html" class="nav-item">Collection</a>
+            <a href="shop.html" class="nav-item">Shop</a>
+            <a href="about.html" class="nav-item">About</a>
+        </div>
+        <div class="nav-right">
+            <a href="profile.html" class="nav-cart-btn" id="nav-acct-link">Account</a>
+            <button class="nav-cart-btn" onclick="HaloiCart.open()">
+                Cart <span id="nav-cart-count">(0)</span>
+            </button>
+            <div class="nav-hamburger" onclick="toggleMobileNav()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CART PAGE CONTENT -->
+    <main class="cart-page-wrapper">
+        <div class="cart-page-header">
+            <h1 class="cart-page-title">Your Cart</h1>
+            <span class="cart-item-count" id="page-item-count"></span>
+        </div>
+
+        <div class="cart-page-layout" id="cart-page-layout">
+            <!-- Rendered by JS -->
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="founder">THANK YOU</div>
+                <div class="footer-links">
+            <a href="shipping.html" class="footer-link">Shipping</a>
+            <a href="return.html"   class="footer-link">Returns</a>
+            <a href="privacy.html"  class="footer-link">Privacy Policy</a>
+            <a href="terms.html"    class="footer-link">Terms of Service</a>
+        </div>
+        <p class="copyright">&copy; 2026 Haloi Threads. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script>
+    /* ── CART PAGE RENDERER ── */
+    const CartPage = {
+        render() {
+            const items  = HaloiCart.items;
+            const layout = document.getElementById('cart-page-layout');
+            const countEl = document.getElementById('page-item-count');
+            const totalQty = items.reduce((s, i) => s + i.qty, 0);
+            if (countEl) countEl.innerText = totalQty + ' Item' + (totalQty !== 1 ? 's' : '');
+
+            if (items.length === 0) {
+                layout.innerHTML = `
+                <div class="empty-state">
+                    <h2>Your cart is empty</h2>
+                    <p>Add something beautiful to begin.</p>
+                    <a href="shop.html" class="btn-luxury" style="opacity:1; display:inline-block;">Continue Shopping</a>
+                </div>`;
+                return;
+            }
+
+            const subtotal = HaloiCart.getTotal();
+            const shipping = subtotal >= 5000 ? 0 : 150;
+            const total    = subtotal + shipping;
+            const fmt      = v => '₹' + new Intl.NumberFormat('en-IN').format(v);
+
+            const itemsHTML = items.map(item => {
+                const key = item.id + '_' + item.variant.replace(/\s+/g, '');
+                return `
+                <div class="cart-page-item" id="cp-item-${key}">
+                    <div class="cart-page-img">
+                        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : ''}
+                    </div>
+                    <div class="cart-page-info">
+                        <h3 class="cart-page-name">${item.name}</h3>
+                        <span class="cart-page-variant">${item.variant}</span>
+                        <span class="cart-page-unit-price">${fmt(item.price)} each</span>
+                    </div>
+                    <div class="cart-page-qty-remove">
+                        <div class="cart-page-qty">
+                            <div class="cart-page-qty-btn" onclick="CartPage.updateQty('${item.id}','${item.variant}',-1)">−</div>
+                            <div class="cart-page-qty-val" id="cpq-${key}">${item.qty}</div>
+                            <div class="cart-page-qty-btn" onclick="CartPage.updateQty('${item.id}','${item.variant}',1)">+</div>
+                        </div>
+                        <div class="cart-page-price">${fmt(item.price * item.qty)}</div>
+                        <div class="cart-page-remove" onclick="CartPage.remove('${item.id}','${item.variant}')">Remove</div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            layout.innerHTML = `
+            <div class="cart-page-items">${itemsHTML}</div>
+            <div class="order-summary">
+                <div class="summary-title">Order Summary</div>
+                ${items.map(i => `
+                <div class="summary-row">
+                    <span>${i.name} <span style="color:#444;">×${i.qty}</span></span>
+                    <span>${fmt(i.price * i.qty)}</span>
+                </div>`).join('')}
+                <div class="summary-divider"></div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cp-subtotal">${fmt(subtotal)}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span id="cp-shipping">${shipping === 0 ? 'Free' : fmt(shipping)}</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="cp-total">${fmt(total)}</span>
+                </div>
+
+                <div class="promo-row">
+                    <input type="text" class="promo-input" id="promo-input" placeholder="Promo code">
+                    <button class="promo-btn" onclick="CartPage.applyPromo()">Apply</button>
+                </div>
+
+                <button class="btn-checkout-page" onclick="HaloiCart.openCheckout()">
+                    Proceed to Checkout
+                </button>
+                <button class="btn-continue-shop" onclick="window.location.href='shop.html'">
+                    Continue Shopping
+                </button>
+
+                <div class="payment-icons">
+                    <span class="payment-icon">Visa</span>
+                    <span class="payment-icon">Mastercard</span>
+                    <span class="payment-icon">UPI</span>
+                    <span class="payment-icon">Razorpay</span>
+                </div>
+                ${subtotal < 5000 ? `<p style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:#333;text-align:center;margin-top:16px;">Add ${fmt(5000 - subtotal)} more for free shipping</p>` : '<p style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-muga);text-align:center;margin-top:16px;">✓ Free shipping applied</p>'}
+            </div>`;
+        },
+
+        updateQty(id, variant, delta) {
+            const item = HaloiCart.items.find(i => i.id === id && i.variant === variant);
+            if (!item) return;
+            const newQty = item.qty + delta;
+            if (newQty < 1) { this.remove(id, variant); return; }
+            item.qty = newQty;
+            HaloiCart.save();
+            this.render(); // Full re-render to update totals
+        },
+
+        remove(id, variant) {
+            HaloiCart.items = HaloiCart.items.filter(i => !(i.id === id && i.variant === variant));
+            HaloiCart.save();
+            this.render();
+        },
+
+        applyPromo() {
+            const code = document.getElementById('promo-input')?.value?.trim().toUpperCase();
+            if (code === 'HALOI10') {
+                alert('Promo code HALOI10 applied! 10% discount will be reflected at checkout.');
+            } else {
+                alert('Invalid promo code. Please try again.');
+            }
+        }
+    };
+
+    /* ── Override HaloiCart render so cart drawer stays in sync ── */
+    document.addEventListener('DOMContentLoaded', () => {
+        CartPage.render();
+
+        // Re-render cart page whenever cart changes
+        const origSave = HaloiCart.save.bind(HaloiCart);
+        HaloiCart.save = function() {
+            origSave();
+            CartPage.render();
+        };
+    });
+
+    function toggleMobileNav() {
+        document.getElementById('main-nav').classList.toggle('nav-mobile-open');
+    }
+    </script>
+</body>
+</html>
